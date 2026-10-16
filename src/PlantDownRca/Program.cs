@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PlantDownRca.Config;
 using PlantDownRca.Core;
@@ -15,13 +16,19 @@ namespace PlantDownRca
         /// No args  -> WinForms UI.
         /// CLI      -> PlantDownRca.exe --from "2026-10-06 14:00" --to "2026-10-06 15:00" [--config plant.config.xml] [--out C:\Temp\RCA]
         /// Merge    -> PlantDownRca.exe --merge "C:\RCA\run-sql" "C:\RCA\run-app" [--out C:\RCA\merged]
-        /// Built as a console exe on purpose: CLI runs get a real console, UI runs still work.
+        /// Built as a console exe on purpose: CLI runs keep a real console. UI runs detach from it
+        /// immediately (FreeConsole), so double-clicking shows ONLY the application window.
         /// </summary>
         [STAThread]
         private static int Main(string[] args)
         {
             if (args == null || args.Length == 0)
             {
+                // UI mode: Windows gives a console-subsystem exe a console window.
+                // Drop it right away so the user sees just the app — no black cmd box.
+                // (CLI/merge runs have args, so they keep their console.)
+                try { FreeConsole(); } catch (Exception) { /* not attached to one */ }
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
@@ -110,5 +117,9 @@ namespace PlantDownRca
                 return parsed;
             return fallback;
         }
+
+        /// <summary>Detaches this process from its console window (UI mode only).</summary>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool FreeConsole();
     }
 }

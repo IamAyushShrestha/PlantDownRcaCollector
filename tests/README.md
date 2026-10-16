@@ -55,3 +55,14 @@ to today, so the samples never go stale.
 3. Date strings `2026-10-15`, `10/15/2026` and `15-Oct-2026` are the ones rewritten by the
    runner — keep using them so the file stays time-independent.
 4. Add an assertion in `run-samples.ps1` if the sample is meant to prove something new.
+
+## Read-only SQL guard
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tests\sql-guard-test.ps1
+```
+
+Asserts 30 cases against `SqlQueryCollector.IsReadOnlySelect`: a single read-only `SELECT`
+(or `WITH ... SELECT`) is accepted, while `INSERT` / `UPDATE` / `DELETE` / `DROP` / `EXEC` / …,
+statement chaining and stored procedures are refused. No database is needed — the guard is
+checked directly, so it runs anywhere.

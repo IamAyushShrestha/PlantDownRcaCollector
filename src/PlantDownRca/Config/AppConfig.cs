@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace PlantDownRca.Config
@@ -117,9 +118,21 @@ namespace PlantDownRca.Config
                 return Defaults();
 
             var serializer = new XmlSerializer(typeof(AppConfig));
-            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+
+            // Harden the XML read: no DTDs and no external resolver, so a tampered config
+            // file cannot pull in external entities (XXE) or blow up memory (billion laughs).
+            var settings = new XmlReaderSettings
             {
-                var cfg = (AppConfig)serializer.Deserialize(stream);
+                DtdProcessing = DtdProcessing.Prohibit,
+                XmlResolver = null,
+                IgnoreComments = true,
+                IgnoreWhitespace = true
+            };
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var reader = XmlReader.Create(stream, settings))
+            {
+                var cfg = (AppConfig)serializer.Deserialize(reader);
                 return cfg ?? Defaults();
             }
         }
@@ -137,6 +150,25 @@ namespace PlantDownRca.Config
         public static string DefaultConfigPathNextToExe()
         {
             return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plant.config.xml");
+        }
+
+        /// <summary>
+        /// First run: if plant.config.xml does not exist yet but the shipped example does,
+        /// copy the example to plant.config.xml so there is always a real config file to look
+        /// at and edit. Returns a short status message for the UI, or null when nothing happened.
+        /// </summary>
+        public static string CreateFromExampleIfMissing()
+        {
+            string path = DefaultConfigPathNextToExe();
+            if (File.Exists(path))
+                return null;
+
+            string example = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plant.config.example.xml");
+            if (!File.Exists(example))
+                return null;
+
+            File.Copy(example, path);
+            return "Created plant.config.xml from the example - edit below, then Save configuration.";
         }
     }
 
