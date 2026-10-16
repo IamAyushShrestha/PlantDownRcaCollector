@@ -1,0 +1,3 @@
+2026-10-15 08:00:00 - ! [100] The job 'NightlyArchive' failed. Unable to connect to SQL Server 'APPSQL'.
+2026-10-15 08:00:02 - ! [100] The job 'NightlyArchive' step 1 (Purge) terminated unexpectedly with exit code 1.
+2026-10-15 08:05:10 - $ [100] The job 'NightlyArchive' was resumed by schedule 'Nightly'.

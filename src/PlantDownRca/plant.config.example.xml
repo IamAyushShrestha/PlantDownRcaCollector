@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy this file to plant.config.xml next to PlantDownRca.exe and edit per server
+  (or simply use the Configurator tab in the app - it writes this file for you).
+
+  Empty folder lists + DiscoveryEnabled=true means the exe auto-finds what it can,
+  which is what makes the same exe work across plants with slightly different layouts.
+
+  plant.config.xml is git-ignored on purpose: it is the one file that can hold a
+  real server name, database name and password.
+-->
+<AppConfig>
+  <PlantName>Example Plant</PlantName>
+  <!-- App, Sql, Kepware, or Other. On a SQL node set Sql; on the app server set App. -->
+  <ServerRole>App</ServerRole>
+  <DiscoveryEnabled>true</DiscoveryEnabled>
+  <IncludeWarnings>true</IncludeWarnings>
+
+  <!-- When true, runs the read-only SELECTs defined in SqlQueries below.
+       Default FALSE - portable across plants without SQL config.
+       Easiest way to set the connection up: Configurator tab -> four boxes (server,
+       database, user, password) or Windows authentication -> "Test connection". -->
+  <EnableSqlQueries>false</EnableSqlQueries>
+
+  <!-- Your application text logs.
+       What is read from each folder listed here: every *.log and *.txt file, in the
+       folder and ALL subfolders, including rolling files written up to 2 days before
+       the window start (each line is then filtered by the timestamp inside it).
+       Point this at a logs root and every subfolder is picked up automatically:
+           C:\PlantLogs\Logs
+       Leave a folder out of this list and it is NOT read - application log folders are
+       never guessed. Easiest way to fill this in: Configurator tab -> "Add folder...". -->
+  <AppLogFolders>
+    <!-- <Folder>C:\PlantLogs\Logs</Folder> -->
+  </AppLogFolders>
+
+  <!-- SQL Server ERRORLOG folder (files: ERRORLOG, ERRORLOG.1, ..., SQLAGENT.OUT).
+       Leave empty to auto-discover Program Files\Microsoft SQL Server\MSSQL*\...\MSSQL\Log
+       on every drive. -->
+  <SqlLogFolders>
+  </SqlLogFolders>
+
+  <!-- Kepware (standard install). Leave empty to auto-discover Program Files (x86)\Kepware,
+       Program Files\Kepware, ProgramData\Kepware. -->
+  <KepwareLogFolders>
+  </KepwareLogFolders>
+
+  <EventLogChannels>
+    <Channel>Application</Channel>
+    <Channel>System</Channel>
+    <Channel>Microsoft-Windows-FailoverClustering/Operational</Channel>
+  </EventLogChannels>
+
+  <!-- Services to check on this server (internal names from services.msc -> Properties). -->
+  <ServicesToCheck>
+    <Service>MSSQLSERVER</Service>
+    <Service>SQLSERVERAGENT</Service>
+    <Service>MSMQ</Service>
+    <!-- <Service>YourAppServiceName</Service> -->
+  </ServicesToCheck>
+
+  <!-- Named SQL connection strings referenced by the queries below.
+       You do not have to write these by hand: the Configurator tab builds them from
+       Server / Database / User name / Password. Ready-made shapes, if you prefer Notepad:
+
+         SQL login : Server=10.0.0.5;Database=MyDatabase;User Id=report_user;Password=YourPassword;
+         Windows   : Server=10.0.0.5;Database=MyDatabase;Trusted_Connection=True;
+         Named inst: Server=10.0.0.5\SQLEXPRESS;Database=MyDatabase;User Id=report_user;Password=YourPassword;
+  -->
+  <SqlQueryConnections>
+    <!-- <Connection Name="PlantDB" ConnectionString="Server=10.0.0.5;Database=MyDatabase;User Id=report_user;Password=YourPassword;" /> -->
+    <!-- <Connection Name="PlantDB" ConnectionString="Server=10.0.0.5;Database=MyDatabase;Trusted_Connection=True;" /> -->
+  </SqlQueryConnections>
+
+  <!-- Parameterized queries. Each MUST use @From and @To (DateTime) parameters.
+       The query runs on the connection referenced by Connection (matches SqlQueryConnection.Name).
+       READ ONLY: SELECT only, nothing is ever written to the database. -->
+  <SqlQueries>
+    <!-- Procedure errors table example -->
+    <!-- <Query Connection="PlantDB" Name="ProcedureErrors"
+           TimestampColumn="LogDate" MessageColumn="ErrorMessage"
+           LevelColumn="Severity" CodeColumn="ErrorNumber">
+      <Sql><![CDATA[
+        SELECT LogDate, ErrorMessage, Severity, ErrorNumber
+        FROM dbo.ProcedureErrorLog
+        WHERE LogDate >= @From AND LogDate <= @To
+        ORDER BY LogDate
+      ]]></Sql>
+    </Query> -->
+
+    <!-- SQL Agent errors table example -->
+    <!-- <Query Connection="PlantDB" Name="AgentErrors"
+           TimestampColumn="LogDate" MessageColumn="Message"
+           LevelColumn="Severity">
+      <Sql><![CDATA[
+        SELECT LogDate, Message, Severity
+        FROM dbo.AgentErrorLog
+        WHERE LogDate >= @From AND LogDate <= @To
+        ORDER BY LogDate
+      ]]></Sql>
+    </Query> -->
+
+    <!-- Message processing table (start/stop times for duration analysis) -->
+    <!-- <Query Connection="PlantDB" Name="MessageProcessing"
+           TimestampColumn="StartTime" MessageColumn="MessageType"
+           CodeColumn="DurationMs" LevelColumn="Status">
+      <Sql><![CDATA[
+        SELECT StartTime, EndTime, MessageType,
+               DATEDIFF(ms, StartTime, EndTime) AS DurationMs,
+               CASE WHEN EndTime IS NULL THEN 'Running' ELSE 'Completed' END AS Status
+        FROM dbo.MessageQueue
+        WHERE StartTime >= @From AND StartTime <= @To
+        ORDER BY StartTime
+      ]]></Sql>
+    </Query> -->
+  </SqlQueries>
+</AppConfig>

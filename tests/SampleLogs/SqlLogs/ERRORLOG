@@ -1,0 +1,12 @@
+2026-10-15 07:30:01.12  Server      Microsoft SQL Server 2019 (RTM) - 15.0.4102.1 (X64)
+2026-10-15 07:30:01.14  Server      UTC adjustment: 2 hours, daily saving time on.
+2026-10-15 07:31:45.88  spid55      Error: 9002, Severity: 19, State: 6.
+2026-10-15 07:31:45.90  spid55      The transaction log for database 'AppDb' is full due to 'ACTIVE_TRANSACTION'.
+2026-10-15 07:33:02.41  spid55      Error: 823, Severity: 24, State: 2.
+2026-10-15 07:33:02.43  spid55      Failed to read the file 'D:\Data\AppDb_log.ldf' because of an I/O error 995 (The I/O operation has been aborted).
+2026-10-15 07:35:12.03  spid52      Error: 18456, Severity: 14, State: 1.
+2026-10-15 07:35:12.05  spid52      Login failed for user 'svc_agent'. [client: 10.20.30.55]
+2026-10-15 07:40:00.11  spid31      The local partition replica of availability group 'AG-Plant' is now the primary replica for availability group 'AG-Plant'.
+2026-10-15 07:41:30.99  spid52      Error: 1205, Severity: 13, State: 4.
+2026-10-15 07:41:31.01  spid52      Transaction (Process ID 52) was deadlocked on lock resources with another process and has been chosen as the deadlock victim. Rerun the transaction.
+2026-10-15 08:15:44.70  Server      A significant part of sql server process memory has been paged out.

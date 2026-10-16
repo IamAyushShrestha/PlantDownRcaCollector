@@ -1,0 +1,19 @@
+# Synthetic sample application log for the PlantDownRCA test harness. Fake data only.
+2026-10-15 07:00:01,100 [1] INFO  PlantScheduling.Host - Service started, mode=Production, version=4.2.1
+2026-10-15 07:05:44,221 [8] WARN  PlantScheduling.Transport - Retry 1 for order 884213: no acknowledgement yet
+2026-10-15 07:12:03,114 [8] ERROR PlantScheduling.Transport - Timeout after 30s for device 12 while waiting for ACK
+2026-10-15 07:12:34,512 [8] ERROR PlantScheduling.Transport - Timeout after 45s for device 19 while waiting for ACK
+2026-10-15 07:13:05,900 [8] ERROR PlantScheduling.Transport - Timeout after 30s for device 7 while waiting for ACK
+2026-10-15 07:13:37,214 [8] ERROR PlantScheduling.Transport - Timeout after 30s for device 12 while waiting for ACK
+2026-10-15 07:14:08,617 [8] ERROR PlantScheduling.Transport - Timeout after 45s for device 23 while waiting for ACK
+2026-10-15 07:14:40,052 [8] ERROR PlantScheduling.Transport - Timeout after 30s for device 7 while waiting for ACK
+2026-10-15 07:16:10,774 [8] ERROR PlantScheduling.Transport - Unable to connect to PLC line-3 at 10.20.30.40:502
+System.Net.Sockets.SocketException: No connection could be made because the target machine actively refused it (10.20.30.40:502)
+   at PlantScheduling.Transport.TcpLink.Connect(String host, Int32 port)
+   at PlantScheduling.Transport.TcpLink.SendAck(String deviceId, TimeSpan timeout)
+   at PlantScheduling.Transport.AckLoop.Run()
+2026-10-15 07:20:00,005 [3] ERROR PlantScheduling.Archive - Archive write failed: There is not enough space on the disk (volume D:)
+2026-10-15 07:22:19,778 [1] INFO  PlantScheduling.Host - Collector heartbeat ok, queue depth 0
+2026-10-15 07:45:03,640 [4] WARN  PlantScheduling.Scheduler - Cycle time exceeded target: 612s > 600s on line 3
+2026-10-15 08:05:12,664 [9] ERROR PlantScheduling.WmsClient - Transport-level error occurred when sending the request to the warehouse database. The connection was lost.
+2026-10-15 08:06:01,219 [9] INFO  PlantScheduling.WmsClient - Reconnected to warehouse database on attempt 1

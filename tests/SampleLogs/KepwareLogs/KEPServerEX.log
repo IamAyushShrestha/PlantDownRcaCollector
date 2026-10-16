@@ -1,0 +1,6 @@
+# Synthetic sample controller-server log for the PlantDownRCA test harness. Fake data only.
+15-Oct-2026 07:52:11 [CH1] INFO  Channel1.Device0 - Session established, poll rate 100 ms
+15-Oct-2026 07:55:31 [CH1] ERROR Channel1.Device0 - Device not responding after 3 retries, address 192.168.1.10
+15-Oct-2026 07:55:31 [CH1] ERROR Channel1.Device0 - Unable to connect to PLC 'Line3Main' at 192.168.1.10:102
+15-Oct-2026 07:56:02 [CH1] WARN  Channel1.Device0 - Tag quality is bad for tag Line3.Speed (source: device)
+15-Oct-2026 07:57:15 [CH1] INFO  Channel1.Device0 - Session re-established, 0 packets lost

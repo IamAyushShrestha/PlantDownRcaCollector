@@ -1,0 +1,7 @@
+# Synthetic sample worker log (US time format) for the PlantDownRCA test harness. Fake data only.
+ERROR Startup check failed: configuration file missing - running with defaults
+10/15/2026 7:58:12 AM INFO  WorkerHost - Loaded 14 handlers in 812 ms
+10/15/2026 8:01:47 AM ERROR WorkerHost - The service terminated unexpectedly after an unhandled exception. Service name: PlantWorker
+10/15/2026 8:02:03 AM WARN  WorkerHost - Restart attempt 1 of 3
+10/15/2026 8:03:55 AM ERROR WorkerHost - Service PlantWorker has stopped responding to health checks
+10/15/2026 8:04:30 AM INFO  WorkerHost - Health check passed after restart
